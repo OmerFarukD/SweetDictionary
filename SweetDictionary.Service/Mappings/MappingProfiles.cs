@@ -15,6 +15,7 @@ namespace SweetDictionary.Service.Mappings
         {
             CreateMap<CreatePostRequestDto,Post>();
             CreateMap<Post, PostResponseDto>();
+            CreateMap<UpdatePostRequestDto, Post>();
         }
     }
 }

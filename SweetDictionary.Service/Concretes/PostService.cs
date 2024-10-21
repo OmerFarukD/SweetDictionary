@@ -5,6 +5,7 @@ using SweetDictionary.Models.Entities;
 using SweetDictionary.Models.Posts;
 using SweetDictionary.Repository.Repositories.Abstracts;
 using SweetDictionary.Service.Abstract;
+using SweetDictionary.Service.Constants;
 using SweetDictionary.Service.Rules;
 
 namespace SweetDictionary.Service.Concretes;
@@ -52,7 +53,7 @@ public sealed class PostService : IPostService
         return new ReturnModel<string>
         {
             Data = $"Post Başlığı : {deletedPost.Title}",
-            Message = "Post Silindi",
+            Message = Messages.PostDeletedMessage,
             Status = 204,
             Success = true
         };
@@ -73,7 +74,7 @@ public sealed class PostService : IPostService
 
     public ReturnModel<List<PostResponseDto>> GetAllByAuthorId(long authorId)
     {
-        List<Post> posts = _postRepository.GetAllByAuthorId(authorId);
+        List<Post> posts = _postRepository.GetAll(p=>p.AuthorId==authorId);
         List<PostResponseDto> responses = _mapper.Map<List<PostResponseDto>>(posts);
 
         return new ReturnModel<List<PostResponseDto>>
@@ -88,7 +89,7 @@ public sealed class PostService : IPostService
 
     public ReturnModel<List<PostResponseDto>> GetAllByCategoryId(int id)
     {
-        List<Post> posts = _postRepository.GetAllByCategoryId(id);
+        List<Post> posts = _postRepository.GetAll(x=>x.CategoryId==id);
         List<PostResponseDto> responses = _mapper.Map<List<PostResponseDto>>(posts);
         return new ReturnModel<List<PostResponseDto>>
         {
@@ -101,7 +102,7 @@ public sealed class PostService : IPostService
 
     public ReturnModel<List<PostResponseDto>> GetAllByTitleContains(string text)
     {
-        var posts = _postRepository.GetAllByTitleContains(text);
+        var posts = _postRepository.GetAll(x=> x.Title.Contains(text));
         var responses = _mapper.Map<List<PostResponseDto>>(posts);
         return new ReturnModel<List<PostResponseDto>>
         {
@@ -140,10 +141,14 @@ public sealed class PostService : IPostService
         {
             _businessRules.PostIsPresent(dto.Id);
 
-            Post post = _mapper.Map<Post>(dto);
-            Post updated = _postRepository.Update(post);
+            Post post = _postRepository.GetById(dto.Id);
 
-            PostResponseDto response = _mapper.Map<PostResponseDto>(updated);
+            post.Title = dto.Title;
+            post.Content = dto.Content;
+
+            _postRepository.Update(post);
+
+            PostResponseDto response = _mapper.Map<PostResponseDto>(post);
 
             return new ReturnModel<PostResponseDto>
             {

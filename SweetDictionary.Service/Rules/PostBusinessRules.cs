@@ -2,6 +2,7 @@
 
 using Core.Exceptions;
 using SweetDictionary.Repository.Repositories.Abstracts;
+using SweetDictionary.Service.Constants;
 
 namespace SweetDictionary.Service.Rules;
 
@@ -14,7 +15,7 @@ public class PostBusinessRules(IPostRepository _postRepository)
         var post = _postRepository.GetById(id);
         if(post is null)
         {
-            throw new NotFoundException($"İlgili id ye göre post bulunamadı : {id}");
+            throw new NotFoundException(Messages.PostIsNotPresentMessage(id));
         }
 
 
