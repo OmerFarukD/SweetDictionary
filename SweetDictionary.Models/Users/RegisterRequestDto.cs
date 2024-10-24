@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace SweetDictionary.Models.Users;
 
-public sealed record RegisterRequestDto(string Name,
+public sealed record RegisterRequestDto(
+    string Name,
     string Lastname,
     string Username,
     string Email,

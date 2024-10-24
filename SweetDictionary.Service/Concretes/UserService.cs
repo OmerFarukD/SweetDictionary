@@ -20,6 +20,21 @@ public class UserService : IUserService
         _userManager = userManager;
     }
 
+    public async Task<string> ChangePasswordAsync(string id, ChangePasswordRequestDto dto)
+    {
+        var user = await _userManager.FindByIdAsync(id);
+        UserIsPresent(user);
+
+        var result = await _userManager.ChangePasswordAsync(user,dto.OldPassword,dto.NewPassword);
+
+        if(result.Succeeded is false)
+        {
+            throw new BusinessException(result.Errors.First().Description);
+        }
+
+        return "Şifre Değiştirildi.";
+    }
+
     public async Task<User> CreateUserAsync(RegisterRequestDto registerRequestDto)
     {
         User user = new User()
@@ -34,15 +49,20 @@ public class UserService : IUserService
         return user;
     }
 
+    public async Task<string> DeleteAsync(string id)
+    {
+        var user = await _userManager.FindByIdAsync(id);
+        UserIsPresent(user);
 
+        await _userManager.DeleteAsync(user);
+
+        return "Kullanıcı Silindi.";
+    }
 
     public async Task<User> GetByEmailAsync(string email)
     {
         var user =await _userManager.FindByEmailAsync(email);
-        if(user is null)
-        {
-            throw new NotFoundException("Kullanıcı bulunamadı.");
-        }
+        UserIsPresent(user);
 
         return user;
     }
@@ -50,10 +70,7 @@ public class UserService : IUserService
     public async Task<User> LoginAsync(LoginRequestDto dto)
     {
         var userExist = await _userManager.FindByEmailAsync(dto.Email);
-        if(userExist is null)
-        {
-            throw new NotFoundException("Bu mailde bir kullanıcı yok.");
-        }
+        UserIsPresent(userExist);
 
         var result = await _userManager.CheckPasswordAsync(userExist,dto.Password);
 
@@ -63,5 +80,32 @@ public class UserService : IUserService
         }
 
         return userExist;
+    }
+
+    public async Task<User> UpdateAsync(string id, UpdateRequestDto dto)
+    {
+        var user = await _userManager.FindByIdAsync(id);
+        UserIsPresent(user);
+
+        user.UserName = dto.Username;
+        user.BirthDate = dto.BirthDate;
+
+        var result = await _userManager.UpdateAsync(user);
+
+        if(result.Succeeded is false)
+        {
+            throw new BusinessException(result.Errors.First().Description);
+        }
+
+        return user;
+
+    }
+
+    private void UserIsPresent(User? user)
+    {
+        if(user is null)
+        {
+            throw new NotFoundException("Kullanıcı bulunamadı.");
+        }
     }
 }

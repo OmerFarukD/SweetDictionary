@@ -17,8 +17,8 @@ public interface IUserService
 
     Task<string> DeleteAsync(string id);
 
-    Task<User> UpdateAsync();
-        // Dto nesnesi alınacak güncellenmesi istenen yerler belirlenecek);
+    Task<User> UpdateAsync(string id,UpdateRequestDto dto);
+    Task<string> ChangePasswordAsync(string id,ChangePasswordRequestDto dto);
 
 
 }
