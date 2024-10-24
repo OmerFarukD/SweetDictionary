@@ -35,7 +35,6 @@ public abstract class EfRepositoryBase<TContext, TEntity, TId> : IRepository<TEn
     public List<TEntity> GetAll(Expression<Func<TEntity,bool>>? filter=null)
     {
         IQueryable<TEntity> query = Context.Set<TEntity>();
-
         if(filter is not null)
         {
           query = query.Where(filter);
