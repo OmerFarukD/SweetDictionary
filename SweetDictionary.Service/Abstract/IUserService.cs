@@ -12,4 +12,13 @@ public interface IUserService
 {
     Task<User> CreateUserAsync(RegisterRequestDto registerRequestDto);
     Task<User> GetByEmailAsync(string email);
+
+    Task<User> LoginAsync(LoginRequestDto dto);
+
+    Task<string> DeleteAsync(string id);
+
+    Task<User> UpdateAsync();
+        // Dto nesnesi alınacak güncellenmesi istenen yerler belirlenecek);
+
+
 }

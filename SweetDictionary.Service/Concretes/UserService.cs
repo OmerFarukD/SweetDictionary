@@ -14,7 +14,7 @@ namespace SweetDictionary.Service.Concretes;
 public class UserService : IUserService
 {
     private readonly UserManager<User> _userManager;
-
+   
     public UserService(UserManager<User> userManager)
     {
         _userManager = userManager;
@@ -45,5 +45,23 @@ public class UserService : IUserService
         }
 
         return user;
+    }
+
+    public async Task<User> LoginAsync(LoginRequestDto dto)
+    {
+        var userExist = await _userManager.FindByEmailAsync(dto.Email);
+        if(userExist is null)
+        {
+            throw new NotFoundException("Bu mailde bir kullanıcı yok.");
+        }
+
+        var result = await _userManager.CheckPasswordAsync(userExist,dto.Password);
+
+        if (result is false)
+        {
+            throw new NotFoundException("Parolanız yanlış.");
+        }
+
+        return userExist;
     }
 }

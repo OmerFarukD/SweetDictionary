@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity.Data;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SweetDictionary.Models.Users;
 using SweetDictionary.Service.Abstract;
 
@@ -27,4 +25,14 @@ public class UsersController(IUserService _userService) : ControllerBase
         var result = await _userService.GetByEmailAsync(email);
         return Ok(result);
     }
+
+    [HttpPost("login")]
+    public async Task<IActionResult> Login([FromBody] LoginRequestDto dto)
+    {
+        var result = await _userService.LoginAsync(dto);
+        return Ok(result);
+    }
+
+
+
 }
