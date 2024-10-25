@@ -23,6 +23,7 @@ public sealed class PostService : IPostService
         _businessRules = businessRules;
     }
 
+    
     public ReturnModel<PostResponseDto> Add(CreatePostRequestDto dto)
     {
         Post createdPost = _mapper.Map<Post>(dto);

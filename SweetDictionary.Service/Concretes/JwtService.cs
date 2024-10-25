@@ -1,5 +1,6 @@
 ﻿using Core.Tokens.Configuration;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using SweetDictionary.Models.Entities;
 using SweetDictionary.Models.Tokens;
 using SweetDictionary.Service.Abstract;
@@ -24,7 +25,27 @@ public class JwtService : IJwtService
     }
     public TokenResponseDto CreateToken(User user)
     {
-        throw new NotImplementedException();
+        var accessTokenExpiration = DateTime.Now.AddMinutes(_tokenOptions.AccessTokenExpiration);
+        var securityKey = SecurityKeyHelper.GetSecurityKey(_tokenOptions.SecurityKey);
+
+        SigningCredentials signingCredentials = new(securityKey,SecurityAlgorithms.HmacSha512Signature);
+
+        JwtSecurityToken jwtSecurityToken = new JwtSecurityToken(
+            issuer: _tokenOptions.Issuer,
+            expires: accessTokenExpiration,
+            claims: GetClaims(user,_tokenOptions.Audience),
+            signingCredentials: signingCredentials
+            );
+
+        var jwtHandler = new JwtSecurityTokenHandler();
+
+        string token = jwtHandler.WriteToken(jwtSecurityToken);
+
+        return new TokenResponseDto
+        {
+            AccessToken = token,
+            AccessTokenExpiration = accessTokenExpiration
+        };
     }
 
     private IEnumerable<Claim> GetClaims(User user,List<string> audiences)
