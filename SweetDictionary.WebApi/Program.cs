@@ -1,3 +1,4 @@
+using Core.Tokens.Configuration;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SweetDictionary.Models.Entities;
@@ -18,9 +19,16 @@ builder.Services.AddControllers();
 
 builder.Services.AddScoped<IPostService, PostService>();
 builder.Services.AddScoped<IPostRepository, EfPostRepository>();
+builder.Services.Configure<CustomTokenOptions>(builder.Configuration.GetSection("TokenOption"));
+//var tokenOption = builder.Configuration.GetSection("TokenOption").Get<CustomTokenOptions>();
+
+
+
+
 
 builder.Services.AddScoped<IUserService,UserService>();
-
+builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<PostBusinessRules>();
 builder.Services.AddDbContext<BaseDbContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("SqlConnection")));
 builder.Services.AddAutoMapper(typeof(MappingProfiles));

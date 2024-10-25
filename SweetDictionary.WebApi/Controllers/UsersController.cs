@@ -6,14 +6,14 @@ namespace SweetDictionary.WebApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class UsersController(IUserService _userService) : ControllerBase
+public class UsersController(IUserService _userService, IAuthenticationService _authenticationService) : ControllerBase
 {
 
 
     [HttpPost("creeate")]
     public async Task<IActionResult> CreateUser([FromBody]RegisterRequestDto dto)
     {
-        var result = await _userService.CreateUserAsync(dto);
+        var result = await _authenticationService.RegisterByTokenAsync(dto);
 
         return Ok(result);
     }
