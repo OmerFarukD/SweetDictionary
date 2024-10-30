@@ -63,7 +63,7 @@ public class JwtService : IJwtService
         var roles = await _userManager.GetRolesAsync(user);
         if (roles.Count > 0)
         {
-            userList.AddRange(roles.Select(x => new Claim("Role", x)));
+            userList.AddRange(roles.Select(x => new Claim(ClaimTypes.Role, x)));
         }
  
         userList.AddRange(audiences.Select(x => new Claim(JwtRegisteredClaimNames.Aud,x)));

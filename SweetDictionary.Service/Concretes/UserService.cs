@@ -44,7 +44,16 @@ public class UserService : IUserService
             BirthDate = registerRequestDto.BirthDate,
         };
 
+      
+
         var result = await _userManager.CreateAsync(user,registerRequestDto.Password);
+
+        var role = await _userManager.AddToRoleAsync(user, "User");
+        if (!role.Succeeded)
+        {
+            throw new BusinessException(role.Errors.First().Description);
+        }
+
 
         return user;
     }

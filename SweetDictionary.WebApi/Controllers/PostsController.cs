@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SweetDictionary.Models.Posts;
 using SweetDictionary.Service.Abstract;
+using System.Security.Claims;
 
 namespace SweetDictionary.WebApi.Controllers;
 
@@ -28,6 +29,7 @@ public class PostsController(IPostService _postService) : ControllerBase
     }
 
     [HttpGet("getbyid/{id}")]
+    [Authorize(Roles ="User")]
     public IActionResult GetById([FromRoute]Guid id)
     {
         var result = _postService.GetById(id);
@@ -51,6 +53,7 @@ public class PostsController(IPostService _postService) : ControllerBase
     [HttpGet("getallbyauthorid")]
     public IActionResult GetAllByAuthorId(string id)
     {
+    
         var result = _postService.GetAllByAuthorId(id);
         return Ok(result);
     }
