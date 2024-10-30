@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SweetDictionary.Models.Posts;
 using SweetDictionary.Service.Abstract;
-using System.Security.Claims;
 
 namespace SweetDictionary.WebApi.Controllers;
 
@@ -11,9 +9,7 @@ namespace SweetDictionary.WebApi.Controllers;
 [ApiController]
 public class PostsController(IPostService _postService) : ControllerBase
 {
-    
-
-
+   
     [HttpGet("getall")]
     public IActionResult GetAll()
     {

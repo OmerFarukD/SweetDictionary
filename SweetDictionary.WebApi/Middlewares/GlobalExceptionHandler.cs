@@ -14,14 +14,21 @@ namespace SweetDictionary.WebApi.Middlewares
             httpContext.Response.ContentType = "application/json";
             httpContext.Response.StatusCode = 500;
 
-            if(exception.GetType() == typeof(NotFoundException))
+            var jsonOptions = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                WriteIndented = false,
+                Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping // Özel karakterler için
+            };
+
+            if (exception.GetType() == typeof(NotFoundException))
             {
                 httpContext.Response.StatusCode = 404;
                 Errors.Success = false;
                 Errors.Message = exception.Message;
                 Errors.Status = 404;
 
-                await httpContext.Response.WriteAsync(JsonSerializer.Serialize(Errors));
+                await httpContext.Response.WriteAsync(JsonSerializer.Serialize(Errors,jsonOptions));
 
             }
 
@@ -32,7 +39,7 @@ namespace SweetDictionary.WebApi.Middlewares
                 Errors.Message = exception.Message;
                 Errors.Status = 400;
 
-                await httpContext.Response.WriteAsync(JsonSerializer.Serialize(Errors));
+                await httpContext.Response.WriteAsync(JsonSerializer.Serialize(Errors,jsonOptions));
 
             }
 
@@ -40,7 +47,7 @@ namespace SweetDictionary.WebApi.Middlewares
             Errors.Success = false;
             Errors.Message = exception.Message;
 
-            await httpContext.Response.WriteAsync(JsonSerializer.Serialize(Errors));
+            await httpContext.Response.WriteAsync(JsonSerializer.Serialize(Errors,jsonOptions));
 
             return true;
         }
