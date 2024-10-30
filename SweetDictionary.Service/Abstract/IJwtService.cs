@@ -10,5 +10,5 @@ namespace SweetDictionary.Service.Abstract;
 
 public interface IJwtService
 {
-    TokenResponseDto CreateToken(User user);
+    Task<TokenResponseDto> CreateToken(User user);
 }

@@ -1,4 +1,5 @@
 ﻿using Core.Tokens.Configuration;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using SweetDictionary.Models.Entities;
@@ -19,11 +20,13 @@ public class JwtService : IJwtService
 {
 
     private readonly CustomTokenOptions _tokenOptions;
-    public JwtService(IOptions<CustomTokenOptions> options)
+    private readonly UserManager<User> _userManager;
+    public JwtService(IOptions<CustomTokenOptions> options, UserManager<User> userManager)
     {
-        _tokenOptions = options.Value;   
+        _tokenOptions = options.Value;
+        _userManager = userManager;
     }
-    public TokenResponseDto CreateToken(User user)
+    public async Task<TokenResponseDto> CreateToken(User user)
     {
         var accessTokenExpiration = DateTime.Now.AddMinutes(_tokenOptions.AccessTokenExpiration);
         var securityKey = SecurityKeyHelper.GetSecurityKey(_tokenOptions.SecurityKey);
@@ -33,7 +36,7 @@ public class JwtService : IJwtService
         JwtSecurityToken jwtSecurityToken = new JwtSecurityToken(
             issuer: _tokenOptions.Issuer,
             expires: accessTokenExpiration,
-            claims: GetClaims(user,_tokenOptions.Audience),
+            claims: await GetClaims(user,_tokenOptions.Audience),
             signingCredentials: signingCredentials
             );
 
@@ -48,17 +51,24 @@ public class JwtService : IJwtService
         };
     }
 
-    private IEnumerable<Claim> GetClaims(User user,List<string> audiences)
+    private async Task<IEnumerable<Claim>> GetClaims(User user,List<string> audiences)
     {
         var userList = new List<Claim>
         {
             new Claim(ClaimTypes.NameIdentifier,user.Id),
             new Claim("email",user.Email),
             new Claim(ClaimTypes.Name, user.UserName),
-            new Claim("mehmed_umud_hojam","Atejle Oynama")
         };
+
+        var roles = await _userManager.GetRolesAsync(user);
+        if (roles.Count > 0)
+        {
+            userList.AddRange(roles.Select(x => new Claim("Role", x)));
+        }
+ 
         userList.AddRange(audiences.Select(x => new Claim(JwtRegisteredClaimNames.Aud,x)));
 
+     
         return userList;
     }
 }
