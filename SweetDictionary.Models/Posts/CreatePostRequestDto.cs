@@ -1,3 +1,3 @@
 ﻿namespace SweetDictionary.Models.Posts;
 
-public sealed record CreatePostRequestDto(string Title, string Content, int CategoryId, string AuthorId);
+public sealed record CreatePostRequestDto(string Title, string Content, int CategoryId);

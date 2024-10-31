@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SweetDictionary.Models.Posts;
 using SweetDictionary.Service.Abstract;
+using System.Security.Claims;
 
 namespace SweetDictionary.WebApi.Controllers;
 
@@ -11,6 +12,7 @@ public class PostsController(IPostService _postService) : ControllerBase
 {
    
     [HttpGet("getall")]
+    [Authorize(Roles = "User")]
     public IActionResult GetAll()
     {
         var result = _postService.GetAll();
@@ -20,14 +22,17 @@ public class PostsController(IPostService _postService) : ControllerBase
     [HttpPost("add")]
     public IActionResult Add([FromBody]CreatePostRequestDto dto)
     {
-        var result = _postService.Add(dto);
+
+        // kullanıcının tokenden id alanının alınması.
+        string authorId = HttpContext.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
+        var result = _postService.Add(dto,authorId);
         return Ok(result);
     }
 
     [HttpGet("getbyid/{id}")]
-    [Authorize(Roles ="User")]
     public IActionResult GetById([FromRoute]Guid id)
     {
+
         var result = _postService.GetById(id);
         return Ok(result);
     }

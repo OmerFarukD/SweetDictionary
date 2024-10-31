@@ -6,7 +6,7 @@ namespace SweetDictionary.Service.Abstract;
 
 public interface IPostService
 {
-    ReturnModel<PostResponseDto> Add(CreatePostRequestDto dto);
+    ReturnModel<PostResponseDto> Add(CreatePostRequestDto dto, string userId);
     ReturnModel<List<PostResponseDto>> GetAll();
     ReturnModel<PostResponseDto> GetById(Guid id);
 

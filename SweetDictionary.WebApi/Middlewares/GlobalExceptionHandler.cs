@@ -18,7 +18,7 @@ namespace SweetDictionary.WebApi.Middlewares
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
                 WriteIndented = false,
-                Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping // Özel karakterler için
+                Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
             };
 
             if (exception.GetType() == typeof(NotFoundException))
