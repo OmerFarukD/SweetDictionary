@@ -5,6 +5,7 @@ using SweetDictionary.Models.Entities;
 using SweetDictionary.Models.Posts;
 using SweetDictionary.Repository.Repositories.Abstracts;
 using SweetDictionary.Service.Abstract;
+using SweetDictionary.Service.CacheServices;
 using SweetDictionary.Service.Constants;
 using SweetDictionary.Service.Rules;
 
@@ -15,22 +16,26 @@ public sealed class PostService : IPostService
     private readonly IPostRepository _postRepository;
     private readonly IMapper _mapper;
     private readonly PostBusinessRules _businessRules;
+    private readonly PostCacheService _cache;
 
-    public PostService(IPostRepository postRepository, IMapper mapper, PostBusinessRules businessRules)
+    public PostService(IPostRepository postRepository, IMapper mapper, PostBusinessRules businessRules, PostCacheService cache)
     {
         _postRepository = postRepository;
         _mapper = mapper;
         _businessRules = businessRules;
+        _cache = cache;
     }
 
     
-    public ReturnModel<PostResponseDto> Add(CreatePostRequestDto dto, string userId)
+    public async Task<ReturnModel<PostResponseDto>> Add(CreatePostRequestDto dto, string userId)
     {
         Post createdPost = _mapper.Map<Post>(dto);
         createdPost.Id = Guid.NewGuid();
         createdPost.AuthorId = userId;
 
         Post post = _postRepository.Add(createdPost);
+
+        await _cache.CreatePostAsync(post);
 
         PostResponseDto response = _mapper.Map<PostResponseDto>(post);
 

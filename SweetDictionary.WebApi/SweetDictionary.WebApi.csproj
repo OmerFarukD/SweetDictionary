@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SweetDictionary.Repository\SweetDictionary.Repository.csproj" />
     <ProjectReference Include="..\SweetDictionary.Service\SweetDictionary.Service.csproj" />
   </ItemGroup>
 

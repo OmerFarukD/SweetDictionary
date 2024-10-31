@@ -1,5 +1,6 @@
 ﻿using Core.Entities;
 using Core.Exceptions;
+using FluentValidation;
 using Microsoft.AspNetCore.Diagnostics;
 using System.Text.Json;
 
@@ -9,7 +10,7 @@ namespace SweetDictionary.WebApi.Middlewares
     {
         public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
         {
-            ReturnModel<string> Errors = new ReturnModel<string>();
+            ReturnModel<List<string>> Errors = new ReturnModel<List<string>>();
 
             httpContext.Response.ContentType = "application/json";
             httpContext.Response.StatusCode = 500;
@@ -30,6 +31,14 @@ namespace SweetDictionary.WebApi.Middlewares
 
                 await httpContext.Response.WriteAsync(JsonSerializer.Serialize(Errors,jsonOptions));
 
+            }
+            if (exception.GetType() == typeof(ValidationException))
+            {
+                httpContext.Response.StatusCode = 400;
+                Errors.Data = ((ValidationException)exception).Errors.Select(e => e.PropertyName).ToList();
+                Errors.Success = false;
+                Errors.Message = exception.Message;
+                Errors.Status = 400;
             }
 
             if (exception.GetType() == typeof(BusinessException))
