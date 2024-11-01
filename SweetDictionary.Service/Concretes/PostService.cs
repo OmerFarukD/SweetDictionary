@@ -11,19 +11,23 @@ using SweetDictionary.Service.Rules;
 
 namespace SweetDictionary.Service.Concretes;
 
+
+// void PostService_WhenPostAdded_ReturnSuccess
+// void PostService_WhenPostAdded_ReturnFailed
+// void PostService_WhenPostAdded_ThrowsException
 public sealed class PostService : IPostService
 {
     private readonly IPostRepository _postRepository;
     private readonly IMapper _mapper;
     private readonly PostBusinessRules _businessRules;
-    private readonly PostCacheService _cache;
+   
 
-    public PostService(IPostRepository postRepository, IMapper mapper, PostBusinessRules businessRules, PostCacheService cache)
+    public PostService(IPostRepository postRepository, IMapper mapper, PostBusinessRules businessRules)
     {
         _postRepository = postRepository;
         _mapper = mapper;
         _businessRules = businessRules;
-        _cache = cache;
+  
     }
 
     
@@ -35,10 +39,10 @@ public sealed class PostService : IPostService
 
         Post post = _postRepository.Add(createdPost);
 
-        await _cache.CreatePostAsync(post);
+     
 
         PostResponseDto response = _mapper.Map<PostResponseDto>(post);
-
+    
         return new ReturnModel<PostResponseDto>
         {
             Data = response,
