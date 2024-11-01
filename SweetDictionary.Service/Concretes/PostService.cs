@@ -148,8 +148,7 @@ public sealed class PostService : IPostService
 
     public ReturnModel<PostResponseDto> Update(UpdatePostRequestDto dto)
     {
-        try
-        {
+   
             _businessRules.PostIsPresent(dto.Id);
 
             Post post = _postRepository.GetById(dto.Id);
@@ -170,12 +169,5 @@ public sealed class PostService : IPostService
             };
 
         }
-        catch (Exception ex)
-        {
-          return  ExceptionHandler<PostResponseDto>.HandleException(ex);
-        }
-
-     
-
     }
-}
+

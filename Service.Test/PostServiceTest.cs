@@ -121,7 +121,27 @@ public class PostServiceTest
         Assert.Throws<NotFoundException>(() => _postService.Delete(id), Messages.PostIsNotPresentMessage(id));
     }
 
-    
+    [Test]
+    public void PostService_WhenGetAllByTitleContainsFilter_ReturnsList()
+    {
+        // Arange
+
+        string text = "deneme";
+        List<Post> posts = new List<Post>();
+        List<PostResponseDto> postResponseDtos = new();
+        _mockRepository.Setup(x => x.GetAll(x => x.Title.Contains(text))).Returns(posts);
+        _mockMapper.Setup(x => x.Map<List<PostResponseDto>>(posts)).Returns(postResponseDtos);
 
 
+        // Act
+        var result = _postService.GetAllByTitleContains(text);
+
+
+
+        //Assert
+        Assert.AreEqual(postResponseDtos,result.Data);
+        Assert.IsTrue(result.Success);
+        Assert.AreEqual(200,result.Status);
+    }
+        
 }
