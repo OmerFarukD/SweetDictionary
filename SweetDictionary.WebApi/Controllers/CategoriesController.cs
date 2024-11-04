@@ -12,7 +12,7 @@ public class CategoriesController(ICategoryService _categoryService) : Controlle
 {
 
     [HttpPost("add")]
-    [Authorize(Roles ="Admin")]
+   // [Authorize(Roles ="Admin")]
     public IActionResult Add([FromBody] CategoryAddRequestDto dto)
     {
         var result = _categoryService.Add(dto);
@@ -38,7 +38,7 @@ public class CategoriesController(ICategoryService _categoryService) : Controlle
 
 
     [HttpDelete("delete/{id:int}")]
-    [Authorize(Roles ="Admin")]
+  //  [Authorize(Roles ="Admin")]
     public IActionResult Delete([FromRoute] int id)
     {
         var result = _categoryService.Delete(id);
@@ -48,7 +48,7 @@ public class CategoriesController(ICategoryService _categoryService) : Controlle
 
 
     [HttpPut("update")]
-    [Authorize(Roles ="Admin")]
+  //  [Authorize(Roles ="Admin")]
     public IActionResult Update([FromBody] CategoryUpdateRequestDto dto)
     {
         var result = _categoryService.Update(dto);

@@ -3,12 +3,6 @@ using Microsoft.AspNetCore.Identity;
 using SweetDictionary.Models.Entities;
 using SweetDictionary.Models.Users;
 using SweetDictionary.Service.Abstract;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace SweetDictionary.Service.Concretes;
 
 public class UserService : IUserService

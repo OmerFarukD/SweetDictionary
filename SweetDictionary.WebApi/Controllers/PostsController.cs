@@ -66,4 +66,15 @@ public class PostsController(IPostService _postService) : ControllerBase
         var result = _postService.GetAllByTitleContains(text);
         return Ok(result);
     }
+
+
+    [HttpGet("ownpost")]
+    public IActionResult OwnPosts()
+    {
+        string userId = HttpContext.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
+        var result = _postService.GetAllByAuthorId(userId);
+
+        return Ok(result);
+
+    }
 }
