@@ -33,9 +33,13 @@ public sealed class PostService : IPostService
     
     public async Task<ReturnModel<PostResponseDto>> Add(CreatePostRequestDto dto, string userId)
     {
+        _businessRules.PostTitleMustBeUnique(dto.Title);
+
         Post createdPost = _mapper.Map<Post>(dto);
         createdPost.Id = Guid.NewGuid();
         createdPost.AuthorId = userId;
+
+       
 
         Post post = _postRepository.Add(createdPost);
 
@@ -126,8 +130,6 @@ public sealed class PostService : IPostService
 
     public ReturnModel<PostResponseDto> GetById(Guid id)
     {
-        try
-        {
             _businessRules.PostIsPresent(id);
 
             var post = _postRepository.GetById(id);
@@ -139,17 +141,13 @@ public sealed class PostService : IPostService
                 Status = 200,
                 Success = true
             };
-        }catch(Exception ex)
-        {
-           return ExceptionHandler<PostResponseDto>.HandleException(ex);
-        }
-       
     }
 
     public ReturnModel<PostResponseDto> Update(UpdatePostRequestDto dto)
     {
    
             _businessRules.PostIsPresent(dto.Id);
+            //_businessRules.PostTitleMustBeUnique(dto.Title);
 
             Post post = _postRepository.GetById(dto.Id);
 

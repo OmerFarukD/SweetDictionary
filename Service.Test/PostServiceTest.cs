@@ -135,9 +135,6 @@ public class PostServiceTest
 
         // Act
         var result = _postService.GetAllByTitleContains(text);
-
-
-
         //Assert
         Assert.AreEqual(postResponseDtos,result.Data);
         Assert.IsTrue(result.Success);

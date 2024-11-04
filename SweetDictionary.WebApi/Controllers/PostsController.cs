@@ -8,6 +8,7 @@ namespace SweetDictionary.WebApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class PostsController(IPostService _postService) : ControllerBase
 {
    

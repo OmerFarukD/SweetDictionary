@@ -18,6 +18,7 @@ public static class RepositoryDependencies
     public static IServiceCollection AddRepositoryDepencdencies(this IServiceCollection services,IConfiguration configuration)
     {
         services.AddScoped<IPostRepository, EfPostRepository>();
+        services.AddScoped<ICategoryRepository, EfCategoryRepository>();
         services.AddDbContext<BaseDbContext>(opt => opt.UseSqlServer(configuration.GetConnectionString("SqlConnection")));
         return services;
     }

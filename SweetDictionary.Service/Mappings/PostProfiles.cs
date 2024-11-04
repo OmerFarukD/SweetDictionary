@@ -4,9 +4,9 @@ using SweetDictionary.Models.Posts;
 
 namespace SweetDictionary.Service.Mappings;
 
-public class MappingProfiles : Profile
+public class PostProfiles : Profile
 {
-    public MappingProfiles()
+    public PostProfiles()
     {
         CreateMap<CreatePostRequestDto,Post>();
         CreateMap<Post, PostResponseDto>();

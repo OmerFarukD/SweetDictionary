@@ -18,6 +18,8 @@ public static class ServiceDependencies
     {
         services.AddScoped<IPostService, PostService>();
         services.AddScoped<IUserService, UserService>();
+
+        services.AddScoped<ICategoryService, CategoryService>();
         services.AddScoped<IAuthenticationService, AuthenticationService>();
         services.AddScoped<IJwtService, JwtService>();
         services.AddScoped<PostCacheService>();

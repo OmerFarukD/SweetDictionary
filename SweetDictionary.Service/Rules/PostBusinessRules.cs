@@ -23,4 +23,15 @@ public class PostBusinessRules(IPostRepository _postRepository)
 
 
     }
+
+
+    public void PostTitleMustBeUnique(string title)
+    {
+        var post = _postRepository.GetAll(x=> x.Title == title);
+        if (post.Count > 0)
+        {
+            throw new BusinessException("Post benzersiz olmalı.");
+        }
+    }
+
 }
