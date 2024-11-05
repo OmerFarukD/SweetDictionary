@@ -1,5 +1,4 @@
 ﻿using Core.Entities;
-using SweetDictionary.Models.Entities;
 using SweetDictionary.Models.Posts;
 
 namespace SweetDictionary.Service.Abstract;
