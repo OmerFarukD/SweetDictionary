@@ -24,7 +24,8 @@ builder.Services.AddIdentity<User, IdentityRole>(opt =>
 {
     opt.User.RequireUniqueEmail = true;
     opt.Password.RequireNonAlphanumeric = false;
-}).AddEntityFrameworkStores<BaseDbContext>();
+})
+    .AddEntityFrameworkStores<BaseDbContext>();
 
 
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
@@ -65,7 +66,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseExceptionHandler(_ => { });
+//app.UseExceptionHandler(_ => { });
 app.UseHttpsRedirection();
 
 app.UseAuthentication();

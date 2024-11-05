@@ -22,6 +22,7 @@ public static class ServiceDependencies
         services.AddScoped<ICommentService, CommentService>();
         services.AddScoped<IAuthenticationService, AuthenticationService>();
         services.AddScoped<IJwtService, JwtService>();
+        services.AddScoped<IRoleService, RoleService>();
         services.AddScoped<PostCacheService>();
         services.AddScoped<PostBusinessRules>();
         services.AddAutoMapper(Assembly.GetExecutingAssembly());

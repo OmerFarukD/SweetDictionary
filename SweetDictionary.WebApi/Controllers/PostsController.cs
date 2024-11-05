@@ -13,7 +13,7 @@ public class PostsController(IPostService _postService) : ControllerBase
 {
    
     [HttpGet("getall")]
-    [Authorize(Roles = "User")]
+    //[Authorize(Roles = "User")]
     public IActionResult GetAll()
     {
         var result = _postService.GetAll();

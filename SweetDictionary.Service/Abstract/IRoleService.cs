@@ -17,6 +17,6 @@ namespace SweetDictionary.Service.Abstract
 
         Task<List<string>> GetAllRolesByUserId(string userId);
 
-        Task<string> AddRoleAsync(string Name);
+        Task<string> AddRoleAsync(string name);
     }
 }

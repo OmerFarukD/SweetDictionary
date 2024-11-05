@@ -7,8 +7,15 @@ using SweetDictionary.Service.Abstract;
 
 namespace SweetDictionary.Service.Concretes;
 
-public sealed class RoleService(UserManager<User> userManager, RoleManager<IdentityRole> roleManager) : IRoleService
+public sealed class RoleService : IRoleService
 {
+    private readonly UserManager<User> userManager;
+    private readonly RoleManager<IdentityRole> roleManager;
+    public RoleService(UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
+    {
+        this.roleManager = roleManager;
+        this.userManager = userManager;
+    }
     public async Task<string> AddRoleToUser(RoleAddToUserRequestDto dto)
     {
         //Rol kontrolü
@@ -42,12 +49,12 @@ public sealed class RoleService(UserManager<User> userManager, RoleManager<Ident
     {
 
         var role = new IdentityRole { Name = name };
-        var checkRoleName = await roleManager.GetRoleNameAsync(role);
-        if(checkRoleName is not null)
-           throw new BusinessException("Eklemek istediğiniz rol benzerseiz olmalıdır.");
-        
+        var checkRoleName = await roleManager.FindByNameAsync(name);
+        if (checkRoleName is not null)
+            throw new BusinessException("Eklemek istediğiniz rol benzerseiz olmalıdır.");
 
-      var result =  await roleManager.CreateAsync(role);
+
+        var result =  await roleManager.CreateAsync(role);
         if (!result.Succeeded)
             throw new BusinessException(result.Errors.First().Description);
         
